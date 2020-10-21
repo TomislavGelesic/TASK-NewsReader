@@ -43,6 +43,9 @@ class NewsTableViewController: UITableViewController {
         let detailScreen = DetailScreenViewController()
         detailScreen.title = self.articles[indexPath.row].title
 //        detailScreen.navigationController?.navigationBar.tintColor = .blue
+        detailScreen.imageViewDetails.image = UIImage(url: URL(string: articles[indexPath.row].urlToImage))
+        detailScreen.titleLabelDetails.text = articles[indexPath.row].title
+        detailScreen.textLabelDetails.text = articles[indexPath.row].description
         self.show(detailScreen, sender: self)
     }
     
@@ -77,13 +80,16 @@ extension NewsTableViewController {
     }
 }
 
-//MARK: NEWS
-
-class News {
-    var image: UIImage?
-    var title: String?
-    
-    init() {
-        
+// MARK: extension UIImage from URL
+extension UIImage {
+  convenience init?(url: URL?) {
+    guard let url = url else { return nil }
+            
+    do {
+      self.init(data: try Data(contentsOf: url))
+    } catch {
+      print("Cannot load image from url: \(url) with error: \(error)")
+      return nil
     }
+  }
 }
