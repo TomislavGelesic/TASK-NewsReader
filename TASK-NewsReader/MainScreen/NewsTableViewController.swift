@@ -22,6 +22,12 @@ class NewsTableViewController: UITableViewController {
         return spinner
     }()
     
+    let pullToRefreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        return control
+    }()
+    
     
     //MARK: Life-cycle methods
     override func viewDidLoad() {
@@ -29,6 +35,8 @@ class NewsTableViewController: UITableViewController {
         
         view.backgroundColor = .white
         view.addSubview(spinner)
+        view.addSubview(pullToRefreshControl)
+        pullToRefreshControl.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
         
         navigationItem.title = "News reader"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
@@ -82,28 +90,32 @@ extension NewsTableViewController {
         
         let session = URLSession.shared
         session.dataTask(with: url) { (data, response, error) in
-            
-            if let data = data {
-                do{
-                    let json = try JSONDecoder().decode(NewsAPI.self, from: data)
-                    //                    let json = try JSONSerialization.jsonObject(with: data, options: [])
-                    //                    print(json.articles[0].title)
-                    for article in json.articles{
-                        self.articles.append(article)
-                    }
-                } catch {
-                    let alert = UIAlertController(title: "Error", message: "Ups, error occured!", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-                    DispatchQueue.main.async {
-                        self.present(alert, animated: true, completion: nil)
-                        self.fetchData()
-                    }
-                    
+            if let error = error {
+                let alert = UIAlertController(title: "Error", message: "Ups, error occured!", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                DispatchQueue.main.async {
+                    self.spinner.stopAnimating()
+                    self.present(alert, animated: true, completion: nil)
+                    print(error)
                 }
             }
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                self.spinner.stopAnimating()
+            else {
+                if let data = data {
+                    do{
+                        let json = try JSONDecoder().decode(NewsAPI.self, from: data)
+                        //                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+                        //                    print(json.articles[0].title)
+                        for article in json.articles{
+                            self.articles.append(article)
+                        }
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                            self.spinner.stopAnimating()
+                        }
+                    } catch {
+                        print("Error parsing JSON")
+                    }
+                }
             }
         }.resume()
     }
@@ -111,6 +123,7 @@ extension NewsTableViewController {
     @objc func refreshNews() {
         print("Retrieving update on news...")
         fetchData()
+        pullToRefreshControl.endRefreshing()
     }
     
     func spinnerConstraints () {
