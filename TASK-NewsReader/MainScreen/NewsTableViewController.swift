@@ -7,11 +7,17 @@
 
 import UIKit
 
+
+
 class NewsTableViewController: UITableViewController {
     
     //MARK: Properties
+    let cellId = "cellId"
+    let API_KEY_1:String = "d5017336d77b4bd98755d5c62d353a04"
+    let API_KEY_2:String = "89adcdc10bf34345811ec7e66330d4c9"
+    let BASE_URL: String = "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey="
     
-    var articles = [NewsAPI.Article]()
+    var articles = [News.Article]()
     
     var timer: Timer?
     
@@ -33,25 +39,11 @@ class NewsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
-        view.addSubview(spinner)
-        view.addSubview(pullToRefreshControl)
-        pullToRefreshControl.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
+        setup()
+        setupTableView()
+        setTimerRefreshInterval(interval: 5*60)
         
-        navigationItem.title = "News reader"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        self.navigationController?.navigationBar.barTintColor = .blue
-        
-        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "cellId")
-        tableView.rowHeight = 65
-        
-        self.timer = Timer.scheduledTimer(timeInterval: 5*60, target: self, selector: #selector(refreshNews), userInfo: nil, repeats: true)
-        
-        spinnerConstraints()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        fetchData()
+            fetchData()
     }
     
     //MARK: UITableView OVERRIDES
@@ -60,21 +52,23 @@ class NewsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as? NewsTableViewCell else { fatalError("my cell fail") }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as? NewsTableViewCell else { fatalError("my cell fail") }
         guard let imageUrl = URL(string: articles[indexPath.row].urlToImage) else { fatalError("my cell fail - image url") }
-        cell.imageViewCell.load(url: imageUrl)
+        cell.imageViewCell.image = UIImage(url: imageUrl)
         cell.titleLabelCell.text = articles[indexPath.row].title
+        cell.descriptionLabelCell.text = articles[indexPath.row].description
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailScreen = DetailScreenViewController()
-        detailScreen.title = self.articles[indexPath.row].title
-        //        detailScreen.navigationController?.navigationBar.tintColor = .blue
-        detailScreen.imageViewDetails.image = UIImage(url: URL(string: articles[indexPath.row].urlToImage))
-        detailScreen.titleLabelDetails.text = articles[indexPath.row].title
-        detailScreen.textLabelDetails.text = articles[indexPath.row].description
-        self.show(detailScreen, sender: self)
+        if let image = UIImage(url: URL(string: articles[indexPath.row].urlToImage)) {
+            let detailScreen = DetailScreenViewController(title: articles[indexPath.row].title,
+                                                          image: image,
+                                                          text: articles[indexPath.row].description)
+            detailScreen.title = self.articles[indexPath.row].title
+            detailScreen.modalPresentationStyle = .fullScreen
+            navigationController?.pushViewController(detailScreen, animated: true)
+        }
     }
     
 }
@@ -82,31 +76,53 @@ class NewsTableViewController: UITableViewController {
 //MARK: Functions
 extension NewsTableViewController {
     
-    private func fetchData() {
+    private func setup(){
         
-        guard let url = URL(string: "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=d5017336d77b4bd98755d5c62d353a04") else { return }
+        navigationItem.title = "News reader"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        self.navigationController?.navigationBar.barTintColor = .blue
+        
+        view.backgroundColor = .white
+        view.addSubview(spinner)
+        spinnerConstraints()
+        
+        view.addSubview(pullToRefreshControl)
+        pullToRefreshControl.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
+    }
+    
+    private func setupTableView(){
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "cellId")
+        tableView.rowHeight = 80
+        
+    }
+    
+    private func setTimerRefreshInterval (interval: Int) {
+        self.timer = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(refreshNews), userInfo: nil, repeats: true)
+    }
+    
+    private func spinnerConstraints () {
+        spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    }
+    
+    private func fetchData() {
+        guard let url = URL(string: BASE_URL + API_KEY_2) else { return }
         
         spinner.startAnimating()
         
         let session = URLSession.shared
         session.dataTask(with: url) { (data, response, error) in
             if let error = error {
-                let alert = UIAlertController(title: "Error", message: "Ups, error occured!", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .cancel))
-                DispatchQueue.main.async {
-                    self.spinner.stopAnimating()
-                    self.present(alert, animated: true, completion: nil)
-                    print(error)
-                }
+                self.showAlert()
+                print(error)
             }
             else {
                 if let data = data {
                     do{
-                        let json = try JSONDecoder().decode(NewsAPI.self, from: data)
-                        //                    let json = try JSONSerialization.jsonObject(with: data, options: [])
-                        //                    print(json.articles[0].title)
+                        let json = try JSONDecoder().decode(News.self, from: data)
+                        self.articles.removeAll()
                         for article in json.articles{
-                            self.articles.append(article)
+                                self.articles.append(article)
                         }
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
@@ -126,9 +142,14 @@ extension NewsTableViewController {
         pullToRefreshControl.endRefreshing()
     }
     
-    func spinnerConstraints () {
-        spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    
+    private func showAlert(){
+        let alert = UIAlertController(title: "Error", message: "Ups, error occured!", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        DispatchQueue.main.async {
+            self.spinner.stopAnimating()
+            self.present(alert, animated: true, completion: nil)
+        }
     }
 }
 

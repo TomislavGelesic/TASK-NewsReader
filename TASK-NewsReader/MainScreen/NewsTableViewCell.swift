@@ -19,10 +19,24 @@ class NewsTableViewCell: UITableViewCell {
     
     let titleLabelCell: UILabel = {
         let label = UILabel ()
-        label.numberOfLines = 0
+        label.numberOfLines = 2
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    let descriptionLabelCell: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let textStackCell: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }()
     
     
@@ -45,44 +59,32 @@ extension NewsTableViewCell {
     
     private func setupViews () {
         addSubview(imageViewCell)
-        addSubview(titleLabelCell)
-        constraintImage()
-        constraintTitle()
+        addSubview(textStackCell)
+        
+        textStackCell.addArrangedSubview(titleLabelCell)
+        textStackCell.addArrangedSubview(descriptionLabelCell)
+        
+        
+        setConstraints()
     }
     
-    private func constraintImage(){
+    private func setConstraints(){
         NSLayoutConstraint.activate([
             imageViewCell.topAnchor.constraint(equalTo: self.topAnchor),
             imageViewCell.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             imageViewCell.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            imageViewCell.widthAnchor.constraint(equalToConstant: 70)
+            imageViewCell.widthAnchor.constraint(equalToConstant: 90)
         ])
-    }
-    
-    private func constraintTitle(){
+        
+        
         NSLayoutConstraint.activate([
-            titleLabelCell.leadingAnchor.constraint(equalTo: imageViewCell.trailingAnchor, constant: 10),
-            titleLabelCell.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            titleLabelCell.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+            textStackCell.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            textStackCell.leadingAnchor.constraint(equalTo: imageViewCell.trailingAnchor, constant: 5),
+            textStackCell.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
-    }
-    
-    @objc func cellTapped() {
         
     }
     
 }
 
-extension UIImageView {
-    func load(url: URL) {
-        DispatchQueue.global().async { [weak self] in
-            if let data = try? Data(contentsOf: url) {
-                if let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self?.image = image
-                    }
-                }
-            }
-        }
-    }
-}
+

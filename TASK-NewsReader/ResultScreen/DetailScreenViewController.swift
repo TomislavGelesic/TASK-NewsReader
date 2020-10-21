@@ -29,7 +29,19 @@ class DetailScreenViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
+    
+    //MARK: init
+    init(title: String, image: UIImage, text: String) {
+        super.init(nibName: nil, bundle: nil)
+        self.titleLabelDetails.text = title
+        self.imageViewDetails.image = image
+        self.textLabelDetails.text = text
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white

@@ -15,7 +15,7 @@
 		6040C860253EC65C00B93141 /* TASK_NewsReaderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6040C85F253EC65C00B93141 /* TASK_NewsReaderUITests.swift */; };
 		6040C87D253EC93400B93141 /* DetailScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6040C87C253EC93400B93141 /* DetailScreenViewController.swift */; };
 		6040C888253ECA2A00B93141 /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6040C887253ECA2A00B93141 /* NewsTableViewCell.swift */; };
-		6040C896253F10F200B93141 /* NewsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6040C895253F10F200B93141 /* NewsAPI.swift */; };
+		6040C896253F10F200B93141 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6040C895253F10F200B93141 /* News.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +50,7 @@
 		6040C861253EC65C00B93141 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6040C87C253EC93400B93141 /* DetailScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailScreenViewController.swift; sourceTree = "<group>"; };
 		6040C887253ECA2A00B93141 /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
-		6040C895253F10F200B93141 /* NewsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsAPI.swift; sourceTree = "<group>"; };
+		6040C895253F10F200B93141 /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,7 +158,7 @@
 		6040C89A253F10FB00B93141 /* News */ = {
 			isa = PBXGroup;
 			children = (
-				6040C895253F10F200B93141 /* NewsAPI.swift */,
+				6040C895253F10F200B93141 /* News.swift */,
 			);
 			path = News;
 			sourceTree = "<group>";
@@ -292,7 +292,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6040C896253F10F200B93141 /* NewsAPI.swift in Sources */,
+				6040C896253F10F200B93141 /* News.swift in Sources */,
 				6040C87D253EC93400B93141 /* DetailScreenViewController.swift in Sources */,
 				6040C842253EC65B00B93141 /* NewsTableViewController.swift in Sources */,
 				6040C888253ECA2A00B93141 /* NewsTableViewCell.swift in Sources */,

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NewsAPI: Decodable {
+class News: Decodable {
     var sortBy: String
     var source: String
     var status: String
