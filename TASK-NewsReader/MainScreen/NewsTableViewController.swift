@@ -109,6 +109,7 @@ extension NewsTableViewController {
     }
     
     @objc func refreshNews() {
+        print("Retrieving update on news...")
         fetchData()
     }
     
