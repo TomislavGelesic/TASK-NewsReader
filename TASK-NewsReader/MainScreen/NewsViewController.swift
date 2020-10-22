@@ -37,12 +37,27 @@ class NewsViewController: UIViewController {
     //MARK: Life-cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        UserDefaults.standard.setValue(Date(), forKey: "savedDate")
         setupTableView()
         setupViewController()
         
         setupPullToRefreshControl()
         fetchData()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("View did Appear is called")
+        if let savedDate = UserDefaults.standard.object(forKey: "savedDate") as? Date {
+            if let minutes = Calendar.current.dateComponents([.minute], from: savedDate, to: Date()).minute{
+                if minutes >= 1 {
+                    refreshNews()
+                }
+                print(minutes)
+            }
+        }
+    }
+    
     
 }
 
@@ -108,7 +123,6 @@ extension NewsViewController {
             self.present(alert, animated: true, completion: nil)
         }
     }
-    
 }
 
 //MARK: TableView Setup

@@ -25,8 +25,8 @@ class NewsTableViewCell: UITableViewCell {
         return label
     }()
     
-    let descriptionLabelCell: VerticalFadeTextUILabel = {
-        let label = VerticalFadeTextUILabel()
+    let descriptionLabelCell: VerticalFadeTextLabel = {
+        let label = VerticalFadeTextLabel()
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -60,7 +60,7 @@ extension NewsTableViewCell {
     private func setupViews () {
         addSubview(imageViewCell)
         addSubview(textStackCell)
-        
+        selectionStyle = .none
         textStackCell.addArrangedSubview(titleLabelCell)
         textStackCell.addArrangedSubview(descriptionLabelCell)
         
