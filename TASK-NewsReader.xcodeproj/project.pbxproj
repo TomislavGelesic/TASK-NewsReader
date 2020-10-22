@@ -17,6 +17,7 @@
 		6040C888253ECA2A00B93141 /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6040C887253ECA2A00B93141 /* NewsTableViewCell.swift */; };
 		6040C896253F10F200B93141 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6040C895253F10F200B93141 /* News.swift */; };
 		60510AC725416129004BC823 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60510AC625416129004BC823 /* Extensions.swift */; };
+		6058DE8725418EA2009AD803 /* SpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6058DE8625418EA2009AD803 /* SpinnerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		6040C887253ECA2A00B93141 /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
 		6040C895253F10F200B93141 /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
 		60510AC625416129004BC823 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		6058DE8625418EA2009AD803 /* SpinnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				60510AC625416129004BC823 /* Extensions.swift */,
+				6058DE8625418EA2009AD803 /* SpinnerView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 				6040C896253F10F200B93141 /* News.swift in Sources */,
 				60510AC725416129004BC823 /* Extensions.swift in Sources */,
 				6040C87D253EC93400B93141 /* DetailScreenViewController.swift in Sources */,
+				6058DE8725418EA2009AD803 /* SpinnerView.swift in Sources */,
 				6040C842253EC65B00B93141 /* NewsViewController.swift in Sources */,
 				6040C888253ECA2A00B93141 /* NewsTableViewCell.swift in Sources */,
 				6040C83E253EC65B00B93141 /* AppDelegate.swift in Sources */,

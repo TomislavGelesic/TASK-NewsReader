@@ -64,7 +64,6 @@ extension NewsTableViewCell {
         textStackCell.addArrangedSubview(titleLabelCell)
         textStackCell.addArrangedSubview(descriptionLabelCell)
         
-        
         setConstraints()
     }
     

@@ -8,22 +8,18 @@
 import UIKit
 
 //MARK: Spinner Indicator
-var spinnerView : UIView?
-
+let spinnerView = SpinnerView()
 extension UIViewController {
+    
     func showSpinner() {
-        spinnerView = UIView(frame: self.view.bounds)
-        spinnerView?.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
-        let spinner = UIActivityIndicatorView()
-        spinner.style = .large
-        spinner.center = spinnerView!.center
-        spinner.startAnimating()
-        self.view.addSubview(spinnerView!)
+        view.addSubview(spinnerView)
+        spinnerView.center = view.center
+        spinnerView.startSpinner()
     }
     
-    func stopSpinner(){
-        spinnerView?.removeFromSuperview()
-        spinnerView = nil
+    func hideSpinner() {
+        spinnerView.stopSpinner()
+        spinnerView.removeFromSuperview()
     }
 }
 
@@ -37,5 +33,17 @@ extension UIImage {
             print("Cannot load image from url: \(url) with error: \(error)")
             return nil
         }
+    }
+}
+
+//MARK: Text Gradient
+extension UIView {
+    func fadeoutVerticaly(label: UILabel) {
+        let gradient = CAGradientLayer()
+        gradient.colors = [UIColor.init(white: 0, alpha: 0).cgColor, UIColor.init(white: 1, alpha: 0.8).cgColor]
+        gradient.startPoint = CGPoint(x: 0, y: 0)
+        gradient.endPoint = CGPoint(x: 0, y: 1)
+        self.layer.addSublayer(gradient)
+        self.addSubview(label)
     }
 }

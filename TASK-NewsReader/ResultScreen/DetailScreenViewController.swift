@@ -64,12 +64,12 @@ extension DetailScreenViewController {
             imageViewDetails.heightAnchor.constraint(equalToConstant: view.frame.height/3),
             
             titleLabelDetails.topAnchor.constraint(equalTo: imageViewDetails.bottomAnchor, constant: 10),
-            titleLabelDetails.leadingAnchor.constraint(equalTo: imageViewDetails.leadingAnchor, constant: 5),
-            titleLabelDetails.trailingAnchor.constraint(equalTo: imageViewDetails.trailingAnchor, constant: 5),
+            titleLabelDetails.leadingAnchor.constraint(equalTo: imageViewDetails.leadingAnchor, constant: 10),
+            titleLabelDetails.trailingAnchor.constraint(equalTo: imageViewDetails.trailingAnchor, constant: -10),
             
             textLabelDetails.topAnchor.constraint(equalTo: titleLabelDetails.bottomAnchor, constant: 15),
-            textLabelDetails.leadingAnchor.constraint(equalTo: imageViewDetails.leadingAnchor, constant: 5),
-            textLabelDetails.trailingAnchor.constraint(equalTo: imageViewDetails.trailingAnchor, constant: 5),
+            textLabelDetails.leadingAnchor.constraint(equalTo: imageViewDetails.leadingAnchor, constant: 10),
+            textLabelDetails.trailingAnchor.constraint(equalTo: imageViewDetails.trailingAnchor, constant: -10),
             
         ])
     }
