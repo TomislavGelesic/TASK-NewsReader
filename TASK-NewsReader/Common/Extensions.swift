@@ -37,13 +37,18 @@ extension UIImage {
 }
 
 //MARK: Text Gradient
-extension UIView {
-    func fadeoutVerticaly(label: UILabel) {
+
+class VerticalFadeTextUILabel: UILabel {
+    override open func layoutSubviews() {
+        super.layoutSubviews()
         let gradient = CAGradientLayer()
-        gradient.colors = [UIColor.init(white: 0, alpha: 0).cgColor, UIColor.init(white: 1, alpha: 0.8).cgColor]
-        gradient.startPoint = CGPoint(x: 0, y: 0)
-        gradient.endPoint = CGPoint(x: 0, y: 1)
-        self.layer.addSublayer(gradient)
-        self.addSubview(label)
+        gradient.frame = bounds
+        gradient.colors = [UIColor.white.withAlphaComponent(0).cgColor, UIColor.white.cgColor]
+        gradient.locations = [0.0, 1.0]
+        gradient.startPoint = CGPoint(x: 0.5, y: 0.6)
+        gradient.endPoint = CGPoint(x: 0.5, y: 1.0)
+        
+        layer.insertSublayer(gradient, at: 0)
     }
+    
 }

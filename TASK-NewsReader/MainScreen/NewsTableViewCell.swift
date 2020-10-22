@@ -25,8 +25,8 @@ class NewsTableViewCell: UITableViewCell {
         return label
     }()
     
-    let descriptionLabelCell: UILabel = {
-        let label = UILabel()
+    let descriptionLabelCell: VerticalFadeTextUILabel = {
+        let label = VerticalFadeTextUILabel()
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
