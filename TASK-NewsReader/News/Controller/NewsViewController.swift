@@ -8,21 +8,15 @@
 import UIKit
 
 
-
 class NewsViewController: UIViewController {
     
     //MARK: Properties
-    let CELL_ID   : String = "CELL_ID"
-    let API_KEY_1 : String = "d5017336d77b4bd98755d5c62d353a04"
-    let API_KEY_2 : String = "89adcdc10bf34345811ec7e66330d4c9"
-    let BASE_URL  : String = "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey="
     
-    var articles = [News.Article]()
+    var articles = [Article]()
     
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "CELL_ID")
         tableView.rowHeight = 70
         return tableView
     }()
@@ -37,7 +31,7 @@ class NewsViewController: UIViewController {
     //MARK: Life-cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        UserDefaults.standard.setValue(Date(), forKey: "savedDate")
+        
         setupTableView()
         setupViewController()
         
@@ -45,18 +39,6 @@ class NewsViewController: UIViewController {
         fetchData()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        print("View did Appear is called")
-        if let savedDate = UserDefaults.standard.object(forKey: "savedDate") as? Date {
-            if let minutes = Calendar.current.dateComponents([.minute], from: savedDate, to: Date()).minute{
-                if minutes >= 1 {
-                    refreshNews()
-                }
-                print(minutes)
-            }
-        }
-    }
     
     
 }
@@ -78,7 +60,7 @@ extension NewsViewController {
     }
     
     private func fetchData() {
-        guard let url = URL(string: BASE_URL + API_KEY_2) else { return }
+        guard let url = URL(string: API.BASE_URL + API.API_KEY_2) else { return }
         
         showSpinner()
         
@@ -130,8 +112,12 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     
     private func setupTableView(){
         view.addSubview(tableView)
+        
         tableView.delegate = self
         tableView.dataSource = self
+        
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: CELL.MULTI_CELL_ID)
+        
         tableViewConstraints()
         
     }
@@ -150,23 +136,19 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CELL_ID, for: indexPath) as? NewsTableViewCell,
-              let imageUrl = URL(string: articles[indexPath.row].urlToImage) else { fatalError("cellForRowAt failed...") }
-        cell.imageViewCell.image = UIImage(url: imageUrl)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CELL.MULTI_CELL_ID, for: indexPath) as? NewsTableViewCell else { fatalError("cellForRowAt failed...") }
+        cell.imageViewCell.image = UIImage(url: URL(string: articles[indexPath.row].urlToImage))
         cell.titleLabelCell.text = articles[indexPath.row].title
         cell.descriptionLabelCell.text = articles[indexPath.row].description
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let image = UIImage(url: URL(string: articles[indexPath.row].urlToImage)) {
-            let detailScreen = DetailScreenViewController(title: articles[indexPath.row].title,
-                                                          image: image,
-                                                          text: articles[indexPath.row].description)
-            detailScreen.title = articles[indexPath.row].title
-            detailScreen.modalPresentationStyle = .fullScreen
-            navigationController?.pushViewController(detailScreen, animated: true)
-        }
+            let singleNews = SingleNewsViewController(article: articles[indexPath.row])
+            singleNews.title = articles[indexPath.row].title
+            singleNews.modalPresentationStyle = .fullScreen
+            navigationController?.pushViewController(singleNews, animated: true)
+        
     }
     
 }

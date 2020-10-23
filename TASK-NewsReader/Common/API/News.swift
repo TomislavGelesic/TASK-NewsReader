@@ -13,11 +13,6 @@ class News: Decodable {
     var status: String
     var articles: [Article]
     
-    struct Article: Decodable {
-        var urlToImage: String
-        var title: String
-        var description: String
-    }
     
     init(sortBy: String, source: String, status: String, articles: [Article]) {
         self.sortBy = sortBy
@@ -27,6 +22,23 @@ class News: Decodable {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("News init(coder:) has not been implemented")
+    }
+}
+
+
+class Article: Decodable {
+    var urlToImage: String
+    var title: String
+    var description: String
+    
+    init(urlToImage: String, title: String, description: String){
+        self.urlToImage = urlToImage
+        self.title = title
+        self.description = description
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("Article init(coder:) has not been implemented")
     }
 }
