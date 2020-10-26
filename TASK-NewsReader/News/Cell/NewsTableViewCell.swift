@@ -20,23 +20,17 @@ class NewsTableViewCell: UITableViewCell {
     let titleLabelCell: UILabel = {
         let label = UILabel ()
         label.numberOfLines = 2
-        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.font = UIFont.boldSystemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    let descriptionLabelCell: VerticalFadeTextLabel = {
-        let label = VerticalFadeTextLabel()
+    let contentLabelCell: VerticalFadeTextUILabel = {
+        let label = VerticalFadeTextUILabel()
         label.numberOfLines = 1
+        label.font = UIFont.boldSystemFont(ofSize: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
-    }()
-    
-    let textStackCell: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
     }()
     
     
@@ -58,28 +52,31 @@ class NewsTableViewCell: UITableViewCell {
 extension NewsTableViewCell {
     
     private func setupViews () {
-        addSubview(imageViewCell)
-        addSubview(textStackCell)
+        contentView.addSubview(imageViewCell)
+        contentView.addSubview(titleLabelCell)
+        contentView.addSubview(contentLabelCell)
+        
         selectionStyle = .none
-        textStackCell.addArrangedSubview(titleLabelCell)
-        textStackCell.addArrangedSubview(descriptionLabelCell)
         
         setConstraints()
     }
     
     private func setConstraints(){
+
         NSLayoutConstraint.activate([
-            imageViewCell.topAnchor.constraint(equalTo: self.topAnchor),
-            imageViewCell.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            imageViewCell.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            imageViewCell.widthAnchor.constraint(equalToConstant: 90)
-        ])
-        
-        
-        NSLayoutConstraint.activate([
-            textStackCell.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            textStackCell.leadingAnchor.constraint(equalTo: imageViewCell.trailingAnchor, constant: 5),
-            textStackCell.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+            imageViewCell.topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageViewCell.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            imageViewCell.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            imageViewCell.widthAnchor.constraint(equalToConstant: 100),
+            imageViewCell.heightAnchor.constraint(equalToConstant: 80),
+            
+            titleLabelCell.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            titleLabelCell.leadingAnchor.constraint(equalTo: imageViewCell.trailingAnchor, constant: 5),
+            titleLabelCell.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            
+            contentLabelCell.leadingAnchor.constraint(equalTo: imageViewCell.trailingAnchor, constant: 5),
+            contentLabelCell.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            contentLabelCell.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
         
     }

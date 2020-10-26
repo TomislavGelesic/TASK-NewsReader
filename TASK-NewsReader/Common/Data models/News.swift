@@ -7,7 +7,7 @@
 
 import UIKit
 
-class News: Decodable {
+class News: Codable {
     var sortBy: String
     var source: String
     var status: String
@@ -27,18 +27,4 @@ class News: Decodable {
 }
 
 
-class Article: Decodable {
-    var urlToImage: String
-    var title: String
-    var description: String
-    
-    init(urlToImage: String, title: String, description: String){
-        self.urlToImage = urlToImage
-        self.title = title
-        self.description = description
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("Article init(coder:) has not been implemented")
-    }
-}
+

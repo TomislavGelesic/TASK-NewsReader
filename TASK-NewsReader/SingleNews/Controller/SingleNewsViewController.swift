@@ -12,21 +12,22 @@ import UIKit
 class SingleNewsViewController: UIViewController {
     
     //MARK: Properties
-    var data: [SingleNewsData]
+    var rowData: [RowData]
+    
+    var article: Article
     
     let tableView: UITableView = {
         let tableView = UITableView()
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
     //MARK: init
     init(article: Article) {
-        data = [SingleNewsData]()
-        data.append(SingleNewsData(type: .image, string: article.urlToImage))
-        data.append(SingleNewsData(type: .title, string: article.title))
-        data.append(SingleNewsData(type: .content, string: article.description))
-        
+        self.article = article
+        self.rowData = [RowData]()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -39,8 +40,9 @@ class SingleNewsViewController: UIViewController {
         
         
         setupViewController()
-        setupTableView()
         
+        setupTableView()
+        rowData = createRowData(from: article)
         tableView.reloadData()
     }
 }
@@ -54,6 +56,13 @@ extension SingleNewsViewController {
         view.backgroundColor = .white
     }
     
+    private func createRowData(from article: Article) -> [RowData] {
+        var row = [RowData]()
+        row.append(RowData.init(type: .image, string: article.urlToImage))
+        row.append(RowData.init(type: .title, string: article.title))
+        row.append(RowData.init(type: .content, string: article.description))
+        return row
+    }
 }
 
 //MARK: TableView
@@ -65,11 +74,11 @@ extension SingleNewsViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.dataSource = self
         tableView.delegate = self
         
-        tableView.register(SingleNewsImageCell.self, forCellReuseIdentifier: CELL.IMAGE_CELL_ID)
-        tableView.register(SingleNewsTitleCell.self, forCellReuseIdentifier: CELL.TITLE_CELL_ID)
-        tableView.register(SingleNewsContentCell.self, forCellReuseIdentifier: CELL.CONTENT_CELL_ID)
-        
+        tableView.register(SingleNewsImageCell.self, forCellReuseIdentifier: "SingleNewsImageCell")
+        tableView.register(SingleNewsTitleCell.self, forCellReuseIdentifier: "SingleNewsTitleCell")
+        tableView.register(SingleNewsContentCell.self, forCellReuseIdentifier: "SingleNewsContentCell")
         tableView.rowHeight = UITableView.automaticDimension
+        
         tableViewConstraints()
     }
     
@@ -81,28 +90,29 @@ extension SingleNewsViewController: UITableViewDataSource, UITableViewDelegate {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
+        return rowData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let datum = data[indexPath.row]
-        switch datum.item.type {
+        
+        let item = rowData[indexPath.row]
+        
+        switch item.type {
         case .image:
-            guard let imageCell = tableView.dequeueReusableCell(withIdentifier: CELL.IMAGE_CELL_ID, for: indexPath) as? SingleNewsImageCell  else { fatalError("ERROR tableView.dequeueReusableCell(withIdentifier: CELL.IMAGE_CELL_ID, for: indexPath) as? SingleNewsImageCell ")}
-            imageCell.imageContainer.image = UIImage(url: URL(string: datum.item.value))
-            return imageCell
+            let cell: SingleNewsImageCell = tableView.dequeueReusableCell(for: indexPath)
+            cell.imageContainer.image = UIImage(url: URL(string: item.value))
+            return cell
         case .title:
-            guard let titleCell = tableView.dequeueReusableCell(withIdentifier: CELL.TITLE_CELL_ID, for: indexPath) as? SingleNewsTitleCell  else { fatalError("ERROR tableView.dequeueReusableCell(withIdentifier: CELL.TITLE_CELL_ID, for: indexPath) as? SingleNewsTitleCell ")}
-            titleCell.titleContainer.text = datum.item.value
-            return titleCell
+            let cell: SingleNewsTitleCell = tableView.dequeueReusableCell(for: indexPath)
+            cell.titleContainer.text = item.value
+            return cell
         case .content:
-            guard let contentCell = tableView.dequeueReusableCell(withIdentifier: CELL.CONTENT_CELL_ID, for: indexPath) as? SingleNewsContentCell  else { fatalError("ERROR tableView.dequeueReusableCell(withIdentifier: CELL.CONTENT_CELL_ID, for: indexPath) as? SingleNewsContentCell ")}
-            contentCell.contentContainer.text = datum.item.value
-            return contentCell
-            
+            let cell: SingleNewsContentCell = tableView.dequeueReusableCell(for: indexPath)
+            cell.contentContainer.text = item.value
+            return cell
         }
     }
     

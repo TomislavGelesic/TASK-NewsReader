@@ -28,13 +28,13 @@ class SingleNewsContentCell: UITableViewCell {
     }
     
     private func setupViews() {
-        self.addSubview(contentContainer)
+        contentView.addSubview(contentContainer)
         
         NSLayoutConstraint.activate([
-            contentContainer.topAnchor.constraint(equalTo: self.topAnchor, constant: 20),
-            contentContainer.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 20),
-            contentContainer.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
-            contentContainer.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 20)
+            contentContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            contentContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            contentContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            contentContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 class SingleNewsImageCell: UITableViewCell {
-
+    
     let imageContainer: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -24,15 +24,16 @@ class SingleNewsImageCell: UITableViewCell {
         super.init(coder: coder)
         setupViews()
     }
-
+    
     private func setupViews() {
-        self.addSubview(imageContainer)
+        contentView.addSubview(imageContainer)
+        
         NSLayoutConstraint.activate([
-            imageContainer.topAnchor.constraint(equalTo: self.topAnchor),
-            imageContainer.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            imageContainer.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            imageContainer.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            imageContainer.heightAnchor.constraint(equalToConstant: 300)
+            imageContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            imageContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            imageContainer.heightAnchor.constraint(equalToConstant: 250),
+            imageContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 }

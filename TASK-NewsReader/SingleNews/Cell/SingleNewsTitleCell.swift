@@ -11,7 +11,7 @@ class SingleNewsTitleCell: UITableViewCell {
     
     let titleContainer: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 30)
+        label.font = UIFont.boldSystemFont(ofSize: 20)
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -29,13 +29,13 @@ class SingleNewsTitleCell: UITableViewCell {
     }
 
     private func setupViews() {
-        self.addSubview(titleContainer)
+        contentView.addSubview(titleContainer)
         
         NSLayoutConstraint.activate([
-            titleContainer.topAnchor.constraint(equalTo: self.topAnchor, constant: 20),
-            titleContainer.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 20),
-            titleContainer.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
-            titleContainer.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 20)
+            titleContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            titleContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            titleContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            titleContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 }

@@ -16,8 +16,8 @@ class NewsViewController: UIViewController {
     
     let tableView: UITableView = {
         let tableView = UITableView()
+        tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.rowHeight = 70
         return tableView
     }()
     
@@ -36,11 +36,8 @@ class NewsViewController: UIViewController {
         setupViewController()
         
         setupPullToRefreshControl()
-        fetchData()
+        fetchData(spinnerOn: true)
     }
-    
-    
-    
 }
 
 extension NewsViewController {
@@ -53,16 +50,17 @@ extension NewsViewController {
         view.backgroundColor = .white
     }
     
-    
     private func setupPullToRefreshControl() {
         tableView.addSubview(pullToRefreshControl)
         pullToRefreshControl.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
     }
-    
-    private func fetchData() {
-        guard let url = URL(string: API.BASE_URL + API.API_KEY_2) else { return }
+    //MARK: fetchData
+    private func fetchData(spinnerOn: Bool) {
+        guard let url = URL(string: Constants.API.BASE_URL + Constants.API.API_KEY_2) else { return }
         
-        showSpinner()
+        if spinnerOn {
+            showSpinner()
+        }
         
         let session = URLSession.shared
         session.dataTask(with: url) { (data, response, error) in
@@ -80,6 +78,7 @@ extension NewsViewController {
                         }
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
+                            self.pullToRefreshControl.endRefreshing()
                             self.hideSpinner()
                         }
                     } catch {
@@ -92,8 +91,7 @@ extension NewsViewController {
     
     @objc func refreshNews() {
         print("Retrieving update on news...")
-        fetchData()
-        pullToRefreshControl.endRefreshing()
+        fetchData(spinnerOn: false)
     }
     
     
@@ -110,14 +108,39 @@ extension NewsViewController {
 //MARK: TableView Setup
 extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.articles.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CELL.MULTI_CELL_ID, for: indexPath) as? NewsTableViewCell else { return UITableViewCell() }
+        fillCell(cell: cell, from: articles[indexPath.row])
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let singleNews = SingleNewsViewController(article: articles[indexPath.row])
+        singleNews.title = articles[indexPath.row].title
+        singleNews.modalPresentationStyle = .fullScreen
+        navigationController?.pushViewController(singleNews, animated: true)
+    }
+    
+    //MARK: Private Functions
+    private func fillCell(cell: NewsTableViewCell,from article: Article) {
+        cell.imageViewCell.image = UIImage(url: URL(string: article.urlToImage))
+        cell.titleLabelCell.text = article.title
+        cell.contentLabelCell.text = article.description
+    }
+    
     private func setupTableView(){
         view.addSubview(tableView)
         
+        
         tableView.delegate = self
         tableView.dataSource = self
-        
-        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: CELL.MULTI_CELL_ID)
-        
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: Constants.CELL.MULTI_CELL_ID)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 200
         tableViewConstraints()
         
     }
@@ -130,28 +153,6 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.articles.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CELL.MULTI_CELL_ID, for: indexPath) as? NewsTableViewCell else { fatalError("cellForRowAt failed...") }
-        cell.imageViewCell.image = UIImage(url: URL(string: articles[indexPath.row].urlToImage))
-        cell.titleLabelCell.text = articles[indexPath.row].title
-        cell.descriptionLabelCell.text = articles[indexPath.row].description
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            let singleNews = SingleNewsViewController(article: articles[indexPath.row])
-            singleNews.title = articles[indexPath.row].title
-            singleNews.modalPresentationStyle = .fullScreen
-            navigationController?.pushViewController(singleNews, animated: true)
-        
-    }
-    
 }
-
 
 
