@@ -8,8 +8,7 @@
 import UIKit
 
 extension UITableViewCell: ReusableView {
-    static var reusableView: String {
-        
+    static var reuseIdentifier: String {
         return String(describing: self)
     }
 }

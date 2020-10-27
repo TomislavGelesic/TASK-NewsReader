@@ -36,7 +36,11 @@ class NewsViewController: UIViewController {
         setupViewController()
         
         setupPullToRefreshControl()
-        fetchData(spinnerOn: true)
+        fetchData(spinnerOn: true) {
+            self.tableView.reloadData()
+            self.pullToRefreshControl.endRefreshing()
+            self.hideSpinner()
+        }
     }
 }
 
@@ -55,7 +59,7 @@ extension NewsViewController {
         pullToRefreshControl.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
     }
     //MARK: fetchData
-    private func fetchData(spinnerOn: Bool) {
+    private func fetchData(spinnerOn: Bool, completion: @escaping ()->()) {
         guard let url = URL(string: Constants.API.BASE_URL + Constants.API.API_KEY_2) else { return }
         
         if spinnerOn {
@@ -77,9 +81,7 @@ extension NewsViewController {
                             self.articles.append(article)
                         }
                         DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                            self.pullToRefreshControl.endRefreshing()
-                            self.hideSpinner()
+                            completion()
                         }
                     } catch {
                         print("Error parsing JSON")
@@ -91,7 +93,10 @@ extension NewsViewController {
     
     @objc func refreshNews() {
         print("Retrieving update on news...")
-        fetchData(spinnerOn: false)
+        fetchData(spinnerOn: false){
+            self.tableView.reloadData()
+            self.pullToRefreshControl.endRefreshing()
+        }
     }
     
     
@@ -113,7 +118,7 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CELL.MULTI_CELL_ID, for: indexPath) as? NewsTableViewCell else { return UITableViewCell() }
+        let cell: NewsTableViewCell = tableView.dequeueReusableCell(for: indexPath)
         fillCell(cell: cell, from: articles[indexPath.row])
         return cell
     }
@@ -138,7 +143,7 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: Constants.CELL.MULTI_CELL_ID)
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "NewsTableViewCell")
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 200
         tableViewConstraints()
