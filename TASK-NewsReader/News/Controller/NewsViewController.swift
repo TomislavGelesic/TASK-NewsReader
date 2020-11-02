@@ -126,7 +126,6 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let singleNews = SingleNewsViewController(article: articles[indexPath.row])
         singleNews.title = articles[indexPath.row].title
-        singleNews.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(singleNews, animated: true)
     }
     
