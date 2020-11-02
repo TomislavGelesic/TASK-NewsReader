@@ -53,9 +53,7 @@ class NewsTableViewCell: UITableViewCell {
 extension NewsTableViewCell {
     
     private func setupViews () {
-        contentView.addSubview(imageViewCell)
-        contentView.addSubview(titleLabelCell)
-        contentView.addSubview(contentLabelCell)
+        contentView.addSubviews(views: [imageViewCell, titleLabelCell, contentLabelCell])
         contentLabelCell.addGradientLayer(frame: self.frame,
                                           colors: [UIColor.white.withAlphaComponent(0).cgColor, UIColor.white.withAlphaComponent(0.6).cgColor],
                                           startPoint: CGPoint(x: 0.5, y: 0.4),
