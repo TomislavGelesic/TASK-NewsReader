@@ -40,4 +40,5 @@ class SingleNewsImageCell: UITableViewCell {
     func configure(with image: UIImage) {
         imageContainer.image = image
     }
+    
 }
