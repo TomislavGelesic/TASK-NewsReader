@@ -19,17 +19,17 @@ class NewsTableViewCell: UITableViewCell {
     
     let titleLabelCell: UILabel = {
         let label = UILabel ()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 2
         label.font = UIFont.boldSystemFont(ofSize: 14)
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let contentLabelCell: GradientOverlayLabel = {
         let label = GradientOverlayLabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 1
         label.font = UIFont.boldSystemFont(ofSize: 12)
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     

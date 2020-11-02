@@ -16,8 +16,8 @@ class NewsViewController: UIViewController {
     
     let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.separatorStyle = .none
         return tableView
     }()
     

@@ -11,8 +11,8 @@ class SingleNewsContentCell: UITableViewCell {
     
     let contentContainer: UILabel = {
         let label = UILabel()
-        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
         return label
     }()
     
