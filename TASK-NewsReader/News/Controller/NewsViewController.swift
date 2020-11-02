@@ -119,7 +119,7 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: NewsTableViewCell = tableView.dequeueReusableCell(for: indexPath)
-        fillCell(cell: cell, from: articles[indexPath.row])
+        cell.configure(with: articles[indexPath.row])
         return cell
     }
     
@@ -131,16 +131,11 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     //MARK: Private Functions
-    private func fillCell(cell: NewsTableViewCell,from article: Article) {
-        cell.imageViewCell.image = UIImage(url: URL(string: article.urlToImage))
-        cell.titleLabelCell.text = article.title
-        cell.contentLabelCell.text = article.description
-    }
     
     private func setupTableView(){
         view.addSubview(tableView)
         
-        
+    
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "NewsTableViewCell")

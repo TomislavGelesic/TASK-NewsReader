@@ -38,4 +38,8 @@ class SingleNewsTitleCell: UITableViewCell {
             titleContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
+    
+    func configure(with title: String) {
+        titleContainer.text = title
+    }
 }

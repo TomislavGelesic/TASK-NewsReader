@@ -74,9 +74,9 @@ extension SingleNewsViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.dataSource = self
         tableView.delegate = self
         
-        tableView.register(SingleNewsImageCell.self, forCellReuseIdentifier: "SingleNewsImageCell")
-        tableView.register(SingleNewsTitleCell.self, forCellReuseIdentifier: "SingleNewsTitleCell")
-        tableView.register(SingleNewsContentCell.self, forCellReuseIdentifier: "SingleNewsContentCell")
+        tableView.register(SingleNewsImageCell.self, forCellReuseIdentifier: SingleNewsImageCell.reuseIdentifier)
+        tableView.register(SingleNewsTitleCell.self, forCellReuseIdentifier: SingleNewsTitleCell.reuseIdentifier)
+        tableView.register(SingleNewsContentCell.self, forCellReuseIdentifier: SingleNewsContentCell.reuseIdentifier)
         tableView.rowHeight = UITableView.automaticDimension
         
         tableViewConstraints()
@@ -103,15 +103,17 @@ extension SingleNewsViewController: UITableViewDataSource, UITableViewDelegate {
         switch item.type {
         case .image:
             let cell: SingleNewsImageCell = tableView.dequeueReusableCell(for: indexPath)
-            cell.imageContainer.image = UIImage(url: URL(string: item.value))
+            if let image = UIImage(url: URL(string: item.value)) {
+                cell.configure(with: image)
+            }
             return cell
         case .title:
             let cell: SingleNewsTitleCell = tableView.dequeueReusableCell(for: indexPath)
-            cell.titleContainer.text = item.value
+            cell.configure(with: item.value)
             return cell
         case .content:
             let cell: SingleNewsContentCell = tableView.dequeueReusableCell(for: indexPath)
-            cell.contentContainer.text = item.value
+            cell.configure(with: item.value)
             return cell
         }
     }

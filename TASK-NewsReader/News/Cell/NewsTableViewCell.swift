@@ -81,5 +81,12 @@ extension NewsTableViewCell {
         
     }
     
+    func configure(with article: Article) {
+        imageViewCell.image = UIImage(url: URL(string: article.urlToImage))
+        titleLabelCell.text = article.title
+        contentLabelCell.text = article.description
+    }
+    
+    
 }
 

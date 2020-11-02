@@ -36,4 +36,8 @@ class SingleNewsImageCell: UITableViewCell {
             imageContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
+    
+    func configure(with image: UIImage) {
+        imageContainer.image = image
+    }
 }

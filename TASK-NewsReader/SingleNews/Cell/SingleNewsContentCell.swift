@@ -37,6 +37,10 @@ class SingleNewsContentCell: UITableViewCell {
             contentContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
+    
+    func configure(with content: String) {
+        contentContainer.text = content
+    }
 }
 
 
