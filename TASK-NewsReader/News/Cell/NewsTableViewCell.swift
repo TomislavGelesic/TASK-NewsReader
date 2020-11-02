@@ -25,13 +25,14 @@ class NewsTableViewCell: UITableViewCell {
         return label
     }()
     
-    let contentLabelCell: VerticalFadeTextUILabel = {
-        let label = VerticalFadeTextUILabel()
+    let contentLabelCell: GradientOverlayLabel = {
+        let label = GradientOverlayLabel()
         label.numberOfLines = 1
         label.font = UIFont.boldSystemFont(ofSize: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
     
     
     //MARK: Init
@@ -55,7 +56,11 @@ extension NewsTableViewCell {
         contentView.addSubview(imageViewCell)
         contentView.addSubview(titleLabelCell)
         contentView.addSubview(contentLabelCell)
-        
+        contentLabelCell.addGradientLayer(frame: self.frame,
+                                          colors: [UIColor.white.withAlphaComponent(0).cgColor, UIColor.white.withAlphaComponent(0.6).cgColor],
+                                          startPoint: CGPoint(x: 0.5, y: 0.4),
+                                          endPoint: CGPoint(x: 0.5, y: 1.0),
+                                          locations: [0.0, 1.0])
         selectionStyle = .none
         
         setConstraints()
