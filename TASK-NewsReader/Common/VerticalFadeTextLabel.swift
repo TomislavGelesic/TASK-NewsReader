@@ -8,7 +8,7 @@
 import UIKit
 
 
-class VerticalFadeTextUILabel: UILabel {
+class VerticalFadeTextLabel: UILabel {
     
     override open func layoutSubviews() {
         super.layoutSubviews()
