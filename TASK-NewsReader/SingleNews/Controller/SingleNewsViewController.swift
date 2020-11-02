@@ -12,7 +12,7 @@ import UIKit
 class SingleNewsViewController: UIViewController {
     
     //MARK: Properties
-    var rowData: [RowData]
+    var screenData: [RowData]
     
     var article: Article
     
@@ -27,7 +27,7 @@ class SingleNewsViewController: UIViewController {
     //MARK: init
     init(article: Article) {
         self.article = article
-        self.rowData = [RowData]()
+        self.screenData = [RowData]()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -42,7 +42,7 @@ class SingleNewsViewController: UIViewController {
         setupViewController()
         
         setupTableView()
-        rowData = createRowData(from: article)
+        screenData = createRowData(from: article)
         tableView.reloadData()
     }
 }
@@ -93,12 +93,12 @@ extension SingleNewsViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return rowData.count
+        return screenData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let item = rowData[indexPath.row]
+        let item = screenData[indexPath.row]
         
         switch item.type {
         case .image:
