@@ -76,10 +76,7 @@ extension NewsViewController {
                 if let data = data {
                     do{
                         let json = try JSONDecoder().decode(News.self, from: data)
-                        self.articles.removeAll()
-                        for article in json.articles{
-                            self.articles.append(article)
-                        }
+                        self.articles = json.articles
                         DispatchQueue.main.async {
                             completion()
                         }
