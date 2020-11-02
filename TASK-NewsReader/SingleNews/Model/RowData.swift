@@ -7,12 +7,6 @@
 
 import UIKit
 
-enum RowType {
-    case image
-    case title
-    case content
-}
-
 struct RowData {
     var type: RowType
     var value: String
