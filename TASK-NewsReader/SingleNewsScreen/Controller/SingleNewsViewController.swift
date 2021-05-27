@@ -54,6 +54,7 @@ extension SingleNewsViewController {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navigationController?.navigationBar.barTintColor = .blue
         view.backgroundColor = .white
+        title = article.title
     }
     
     private func createRowData(from article: Article) -> [RowData] {
