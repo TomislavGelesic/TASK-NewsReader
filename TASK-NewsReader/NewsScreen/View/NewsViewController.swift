@@ -82,9 +82,9 @@ extension NewsViewController {
                 guard let data = output.data else { return }
                 tableView.reloadData()
             }
-            pullToRefreshControl.endRefreshing()
-            hideSpinner()
         }
+        pullToRefreshControl.endRefreshing()
+        hideSpinner()
     }
     private func setupAppearance(){
         navigationItem.title = "News reader"
