@@ -54,6 +54,7 @@ extension NewsViewController {
         setupPullToRefreshControl()
     }
     private func bindUI() {
+        viewModel.createTableViewDataSource(on: tableView)
         viewModel.bindViewModel()
             .store(in: &disposeBag)
         viewModel.outputSubject
@@ -67,20 +68,16 @@ extension NewsViewController {
         
         for action in output.actions {
             switch action {
-            case .showDetails:
-                guard let articles = output.data,
-                      let position = output.detailsPosition else { return }
-                showNewsDetails(for: articles[position])
+            case .showDetails(let article):
+                self.showNewsDetails(for: article)
             case .showEmpty:
-//                 show empty cell
+//                show empty cell
                 showEmptyAlert()
             case .showError:
 //                guard let error = output.errorType else { return }
                 showAPIFailAlert()
             case .update:
-//                 what should i do with data here?
-                guard let data = output.data else { return }
-                tableView.reloadData()
+                break
             }
         }
         pullToRefreshControl.endRefreshing()
@@ -106,7 +103,6 @@ extension NewsViewController {
     private func setupTableView(){
         view.addSubview(tableView)
         tableView.delegate = self
-        tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 200
         tableViewConstraints()
@@ -149,21 +145,11 @@ extension NewsViewController {
     }
 }
 
-extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.screenData.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: NewsTableViewCell = tableView.dequeueReusableCell(for: indexPath)
-        cell.configure(with: viewModel.screenData[indexPath.row])
-        return cell
-    }
+extension NewsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         showSpinner()
-        viewModel.selected(at: indexPath.row)
+        viewModel.selected(at: indexPath)
     }
 }
 

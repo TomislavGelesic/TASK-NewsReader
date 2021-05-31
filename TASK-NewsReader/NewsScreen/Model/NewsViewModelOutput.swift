@@ -8,8 +8,5 @@
 import Foundation
 
 struct NewsViewModelOutput {
-    var data: [Article]?
     var actions: [NewsOutputAction]
-    var detailsPosition: Int?
-    var errorType: ErrorType?
 }

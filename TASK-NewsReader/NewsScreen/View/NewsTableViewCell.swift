@@ -84,12 +84,13 @@ extension NewsTableViewCell {
         
     }
     
-    func configure(with article: Article) {
-        imageViewCell.image = UIImage(url: URL(string: article.urlToImage))
-        titleLabelCell.text = article.title
-        contentLabelCell.text = article.description
+    func configure(with item: NewsRowItem) {
+        switch item.type {
+        case .news:
+            imageViewCell.image = UIImage(url: URL(string: item.value.urlToImage))
+            titleLabelCell.text = item.value.title
+            contentLabelCell.text = item.value.description
+        }
     }
-    
-    
 }
 

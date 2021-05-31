@@ -5,10 +5,10 @@
 //  Created by Tomislav Gelesic on 27.05.2021..
 //
 
-import Foundation
+import UIKit
 
 enum NewsViewModelInput {
     case none
     case fetchData
-    case selected(Int)
+    case selected(IndexPath)
 }

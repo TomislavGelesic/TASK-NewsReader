@@ -7,7 +7,8 @@
 
 import UIKit
 
-class Article: Codable {
+class Article: Codable, Hashable {
+    var identifier = UUID()
     var urlToImage: String
     var title: String
     var description: String
@@ -17,9 +18,22 @@ class Article: Codable {
         self.title = title
         self.description = description
     }
-    
     required init?(coder: NSCoder) {
         fatalError("Article init(coder:) has not been implemented")
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case urlToImage
+        case title
+        case description
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+    }
+    
+    static func == (lhs: Article, rhs: Article) -> Bool {
+        return lhs.identifier == rhs.identifier
     }
 }
 

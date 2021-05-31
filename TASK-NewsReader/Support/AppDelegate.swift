@@ -14,7 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        let vc = NewsViewController(viewModel: NewsViewModel(repository: NewsRepositoryImpl()))
+        let dependencies = NewsDependencies(repository: NewsRepositoryImpl(), dataSource: nil)
+        let vm = NewsViewModel(dependencies: dependencies)
+        let vc = NewsViewController(viewModel: vm)
         let navigationController = UINavigationController(rootViewController: vc)
         
         window = UIWindow()

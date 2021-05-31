@@ -9,7 +9,7 @@ import Foundation
 
 enum NewsOutputAction {
     case update
-    case showError
-    case showDetails
+    case showError(type: ErrorType?)
+    case showDetails(for: Article)
     case showEmpty
 }
