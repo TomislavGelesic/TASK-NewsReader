@@ -13,6 +13,12 @@ class NewsViewController: UIViewController {
     var disposeBag = Set<AnyCancellable>()
     var viewModel: NewsViewModel
     
+    let alert: UIAlertController = {
+        let alert = UIAlertController(title: "Error", message: "Ups, error occured!", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        return alert
+    }()
+    
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -54,17 +60,12 @@ extension NewsViewController {
         setupPullToRefreshControl()
     }
     private func bindUI() {
-        viewModel.bindViewModel()
-//            .store(in: &disposeBag)
-        viewModel.outputSubject
-            .subscribe(on: DispatchQueue.global(qos: .background))
-            .receive(on: RunLoop.main)
-            .sink { [unowned self] (output) in self.render(output) }
+        viewModel.bindViewModel(to: self)
             .store(in: &disposeBag)
     }
     
-    private func render(_ output: NewsViewModelOutput) {
-        
+    func render(_ output: NewsViewModelOutput) {
+        hideAPIFailAlert()
         for action in output.actions {
             switch action {
             case .showDetails:
@@ -122,11 +123,15 @@ extension NewsViewController {
     }
     
     private func showAPIFailAlert() {
-        let alert = UIAlertController(title: "Error", message: "Ups, error occured!", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
         DispatchQueue.main.async {
             self.hideSpinner()
-            self.present(alert, animated: true, completion: nil)
+            self.present(self.alert, animated: true, completion: nil)
+        }
+    }
+    
+    private func hideAPIFailAlert() {
+        DispatchQueue.main.async {
+            self.alert.dismiss(animated: true, completion: nil)
         }
     }
     

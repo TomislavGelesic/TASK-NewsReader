@@ -10,9 +10,8 @@ import Combine
 
 
 // NewsViewModelOutput <-> AnyPublisher<NewsState, Never>
-// NewsViewModelOutput is expandable like Input - in this app code is reduced due to complexity of the app
 
 protocol NewsViewModelType {
-    var inputSubject: CurrentValueSubject<NewsViewModelInput, Never> { get set }
-    func bindViewModel() -> AnyCancellable
+    var inputSubject: SubjectRelay<NewsViewModelInput, Never> { get set }
+    func bindViewModel(to viewController: NewsViewController) -> AnyCancellable
 }

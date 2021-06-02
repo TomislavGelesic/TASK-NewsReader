@@ -10,28 +10,15 @@ import Combine
 
 class SubjectRelay<ELEMENT, ERROR> where ERROR: Error, ERROR: Equatable {
     
-    typealias DATA_TYPE = ELEMENT
-    typealias ERROR_TYPE = ERROR
+    private let subject: CurrentValueSubject<ELEMENT, ERROR>
     
-    private let subject: CurrentValueSubject<Result<ELEMENT, ERROR>, Never>
-    
-    init(_ value: ELEMENT) {
-        subject = CurrentValueSubject<Result<ELEMENT, ERROR>, Never>(.success(value))
+    init(_ subject: CurrentValueSubject<ELEMENT, ERROR>) {
+        self.subject = subject
     }
-    
-    func accept(_ data: DATA_TYPE) {
-        subject.send(.success(data))
+    func accept(_ data: ELEMENT) {
+        subject.send(data)
     }
-    func subscribe<ELEMENT> (_ subject: AnyPublisher<ELEMENT, Never>) -> AnyPublisher<Result<DATA_TYPE, ERROR_TYPE>, Never> {
-       return subject
-        .flatMap { [unowned self] (_) -> AnyPublisher<Result<DATA_TYPE, ERROR_TYPE>, Never> in
-            return self.subject.eraseToAnyPublisher()
-        }
-        .subscribe(on: DispatchQueue.global(qos: .background))
-        .receive(on: RunLoop.main)
-        .eraseToAnyPublisher()
-    }
-    func getPublisher() -> AnyPublisher<Result<DATA_TYPE, ERROR_TYPE>, Never> {
+    func getPublisher() -> AnyPublisher<ELEMENT, ERROR> {
         self.subject.eraseToAnyPublisher()
     }
 }

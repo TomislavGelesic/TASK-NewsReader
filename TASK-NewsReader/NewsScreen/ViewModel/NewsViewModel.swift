@@ -9,11 +9,7 @@ import UIKit
 import Combine
 
 class NewsViewModel: NewsViewModelType {
-    
-    var newsRelay = SubjectRelay<[Article], ErrorType>([])
-    
-    var outputSubject = CurrentValueSubject<NewsViewModelOutput, Never>(.init(data: [], actions: []))
-    var inputSubject = CurrentValueSubject<NewsViewModelInput, Never>(.none)
+    var inputSubject: SubjectRelay<NewsViewModelInput, Never> = .init(.init(.none))
     var repository: NewsRepository
     var disposeBag = Set<AnyCancellable>()
     var screenData = [Article]()
@@ -23,25 +19,25 @@ class NewsViewModel: NewsViewModelType {
         self.repository = repository
     }
     
-    func bindViewModel() -> AnyCancellable {
-        return newsRelay.subscribe(inputSubject.eraseToAnyPublisher())
-//        return inputSubject
-//            .flatMap { [unowned self] (newsInput) -> AnyPublisher<NewsViewModelOutput, Never> in
-//                switch newsInput {
-//                case .none:
-//                    return self.createPublisher(for: .init(data: [], actions: [.showEmpty]))
-//                case .fetchData:
-//                    return self.fetchNewScreenData()
-//                case .selected(let position):
-//                    let article = self.screenData[position]
-//                    return self.createPublisher(for: .init(data: self.screenData, actions: [.showDetails], detailsPosition: position))
-//                }
-//            }
-//            .subscribe(on: DispatchQueue.global(qos: .background))
-//            .receive(on: RunLoop.main)
-//            .sink { output in
-//                self.outputSubject.send(output)
-//            }
+    func bindViewModel(to viewController: NewsViewController) -> AnyCancellable {
+        return inputSubject
+            .getPublisher()
+            .flatMap { [unowned self] (newsInput) -> AnyPublisher<NewsViewModelOutput, Never> in
+                switch newsInput {
+                case .none:
+                    return self.createPublisher(for: .init(data: [], actions: [.showEmpty]))
+                case .fetchData:
+                    return self.fetchNewScreenData()
+                case .selected(let position):
+                    let article = self.screenData[position]
+                    return self.createPublisher(for: .init(data: self.screenData, actions: [.showDetails], detailsPosition: position))
+                }
+            }
+            .subscribe(on: DispatchQueue.global(qos: .background))
+            .receive(on: RunLoop.main)
+            .sink { (output) in
+                viewController.render(output)
+            }
     }
     
     func fetchNewScreenData() -> AnyPublisher<NewsViewModelOutput, Never> {
@@ -70,7 +66,7 @@ class NewsViewModel: NewsViewModelType {
         }
     }
     
-    func refresh() { inputSubject.send(.fetchData) }    
-    func appear() { inputSubject.send(.fetchData) }
-    func selected(at position: Int) { inputSubject.send(.selected(position)) }
+    func refresh() { inputSubject.accept(.fetchData) }
+    func appear() { inputSubject.accept(.fetchData) }
+    func selected(at position: Int) { inputSubject.accept(.selected(position)) }
 }
