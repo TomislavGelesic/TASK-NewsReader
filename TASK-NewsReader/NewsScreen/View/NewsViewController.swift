@@ -55,7 +55,7 @@ extension NewsViewController {
     }
     private func bindUI() {
         viewModel.bindViewModel()
-            .store(in: &disposeBag)
+//            .store(in: &disposeBag)
         viewModel.outputSubject
             .subscribe(on: DispatchQueue.global(qos: .background))
             .receive(on: RunLoop.main)
